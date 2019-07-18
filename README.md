@@ -1,3 +1,11 @@
+## New Set Up
+Didn't have a chance to do some folder restructuring, so to run it. Open up two terminals:
+
+run yarn start to run the backend
+
+cd into the padpiper-app folder and run yarn start to run react app
+
+__________________________________
 # Challenge
 Hello :wave:
 
