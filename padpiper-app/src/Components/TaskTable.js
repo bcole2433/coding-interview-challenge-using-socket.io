@@ -8,9 +8,24 @@ class TaskTable extends Component {
     }
     return (
       <Container>
-        <label>
+      <label>
           <h1>Tasks</h1>
         </label>
+        <Button
+            size="sm"
+            variant="outline-primary"
+            onClick={() => this.props.markAllComplete()}
+          >
+            Mark All Completed
+          </Button>
+          <Button
+            size="sm"
+            variant="outline-primary"
+            onClick={() => this.props.deleteAll()}
+          >
+            Delete All
+          </Button>
+        
         {this.props.tasks.map((task, index) => (
           <TaskComponent
             key={index}

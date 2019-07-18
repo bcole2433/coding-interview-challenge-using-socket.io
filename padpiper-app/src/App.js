@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import "./App.css";
+import { Container, Row, Col } from 'react-bootstrap';
 import AddItemForm from "./Components/AddItemForm";
 import TaskTable from "./Components/TaskTable";
 import CompletedTable from "./Components/CompletedTable";
@@ -82,7 +83,7 @@ class App extends Component {
   markAllComplete = () => {
     //handle when a user marks all tasks as complete
     const tasks = [ ...this.state.tasks];
-    this.setState({completed: [...this.state.completed, tasks]})
+    this.setState({completed: [...this.state.completed, ...tasks]})
     console.log(this.state.completed)
     this.setState({tasks: []})
     console.log(this.state.tasks)
@@ -116,17 +117,26 @@ class App extends Component {
           handleChange={this.handleChange}
           handleTaskAdd={this.submitTask}
         />
-        <br />
-        <TaskTable 
+        <Container fluid="true">
+        <Row>
+          <Col className="taskCard">
+          <TaskTable 
         tasks={this.state.tasks}
         handleComplete={this.handleComplete}
         markAllComplete={this.markAllComplete}
         handleDelete={this.handleDelete}
         deleteAll={this.deleteAllTasks} 
-        />
-        <CompletedTable 
+        /> 
+          </Col>
+          <Col className="taskCard">
+          <CompletedTable 
           completedList={this.state.completed}
         />
+          </Col>
+          </Row>
+        </Container>
+        
+        
       </React.Fragment>
     );
   }
