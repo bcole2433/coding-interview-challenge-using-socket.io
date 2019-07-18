@@ -28,11 +28,23 @@ class App extends Component {
 //ACTIONS
   handleChange = e => {
     e.preventDefault();
+    const target = e.target;
+    const name = target.name;
+    const value = target.value;
+    this.setState({ [name]: value });
   };
 
   //submitting new task and emitting it to clients
   submitTask = e => {
     e.preventDefault();
+    const title = this.state.title;
+    console.log(title);
+    this.setState({ tasks: [...this.state.tasks, title] });
+
+    //resetting the form manually
+    this.setState({
+      title: ""
+    });
   };
 
   handleComplete = taskID => {
@@ -61,8 +73,8 @@ class App extends Component {
         <h2>PadPiper Team Tasks</h2>
         <AddItemForm
           title={this.state.title}
-          // handleChange={this.handleChange}
-          // handleTaskAdd={this.submitTask}
+          handleChange={this.handleChange}
+          handleTaskAdd={this.submitTask}
         />
         <br />
         <TaskTable 

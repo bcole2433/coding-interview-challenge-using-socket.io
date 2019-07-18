@@ -1,9 +1,45 @@
 import React, { Component } from "react";
+import { Form, Container, Col, Button } from "react-bootstrap";
 
 class AddItemForm extends Component {
     render() {
     return (
-<h1> Something </h1>
+<Container fluid="true">
+          <Form onSubmit={this.handleTaskAdd}>
+            <Form.Row>
+              <h4>Add a new Task</h4>
+            </Form.Row>
+            <Form.Row>
+              <Col lg={true}>
+                <Form.Group controlId="title">
+                  <Form.Control
+                    as="input"
+                    name="title"
+                    block="true"
+                    value={this.props.title}
+                    onChange={this.props.handleChange}
+                    placeholder="ie. Feed the cat"
+                  />
+                </Form.Group>
+              </Col>
+              </Form.Row>
+            <Form.Row>
+              <Col>
+                <Form.Group className="float-right">
+                  <Button
+                    variant="outline-primary"
+                    size="lg"
+                    type="submit"
+                    onClick={this.props.handleTaskAdd}
+                    disabled={!this.props.title}
+                  >
+                    Add Task
+                  </Button>
+                </Form.Group>
+              </Col>
+            </Form.Row>
+          </Form>
+        </Container>
       );
     }
 }
