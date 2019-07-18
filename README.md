@@ -13,9 +13,9 @@ When you're finished, you should have a real-time TODO app that two or more peop
 - It should be fun! If you're stuck on a bug or something needs clarification you can <zach@padpiper.com> for help.
 
 ##  Your Quest
-- [ ] Clone this repo `git clone git@github.com:PadPiper/padpiper-interview-challenge.git`
-- [ ] Make your own private repo and push your changes to that (you'll need to update the origin on the clone)
-- [ ] Add `zlwaterfield` and `JackForbes` as collaborators on the new repo [settings->collaborators]
+- [x ] Clone this repo `git clone git@github.com:PadPiper/padpiper-interview-challenge.git`
+- [ x] Make your own private repo and push your changes to that (you'll need to update the origin on the clone)
+- [x ] Add `zlwaterfield` and `JackForbes` as collaborators on the new repo [settings->collaborators]
 - [ ] Commit often, with high quality comments
 - [ ] Write readable, performant code
 - [ ] Fix all the bugs
