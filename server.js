@@ -24,28 +24,51 @@ io.on('connection', (client) => {
 
   // Sends a message to the client to reload all todos
   const loadTasks = () => {
-    io.emit('LOAD', DB);
+    client.emit('LOAD', DB);
   }
+    // Send the DB downstream on connect
+    loadTasks();
 
   // Accepts when a client makes a new todo
   //and sends only the newly submitted task
   client.on("MAKE", data => {
         
     // Make a new task
-      const newTask = new Task(data.title);
+      const newTask = new Task(title=data);
 
       // Push this newly created todo to our database
       DB.push(newTask);
-      console.log(data)
-      console.log(data.title)
-      console.log(DB)
+      console.log(DB);
 
   //using broadcast to avoid sending same data back
   client.broadcast.emit("RECEIVE_NEW_TASK", data);
 });
 
-  // Send the DB downstream on connect
-  loadTasks();
+client.on("COMPLETE", data => {
+
+//using broadcast to avoid sending same data back
+client.broadcast.emit("RECEIVE_COMPLETED_TASK", data);
+});
+
+client.on("COMPLETE_ALL", data => {
+//using broadcast to avoid sending same data back
+client.broadcast.emit("RECEIVE_COMPLETE_ALL", data);
+});
+
+client.on("DELETE", data => {
+//TODO: Delete from database
+
+//using broadcast to avoid sending same data back
+client.broadcast.emit("RECEIVE_DELETED_TASK", data);
+});
+
+client.on("DELETE_ALL", data => {
+
+//using broadcast to avoid sending same data back
+client.broadcast.emit("RECEIVE_DELETED_ALL", 'Delete All Called');
+});
+
+
 
   //listening for when a client disconnects
   client.on("disconnect", () => console.log("Client has disconnected"));
