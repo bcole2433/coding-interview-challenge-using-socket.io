@@ -23,26 +23,34 @@ io.on('connection', (client) => {
   });
 
   // Sends a message to the client to reload all todos
-  const reloadTasks = () => {
+  const loadTasks = () => {
     io.emit('LOAD', DB);
   }
 
   // Accepts when a client makes a new todo
-  client.on('MAKE', (t) => {
-    // Make a new todo
-    const newTask = new Task(title=t.title);
+  //and sends only the newly submitted task
+  client.on("MAKE", data => {
+        
+    // Make a new task
+    const 
+      const newTask = new Task(data.title);
 
-    // Push this newly created todo to our database
-    DB.push(newTask);
+      // Push this newly created todo to our database
+      DB.push(newTask);
+      console.log(data)
+      console.log(data.title)
+      console.log(DB)
 
-    // Send the latest todos to the client
-    // FIXME: This sends all todos every time, could this be more efficient?
-    // reloadTodos();
-  });
+  //using broadcast to avoid sending same data back
+  client.broadcast.emit("RECEIVE_NEW_TASK", data);
+});
 
   // Send the DB downstream on connect
-  // reloadTodos();
+  loadTasks();
+
+  //listening for when a client disconnects
+  client.on("disconnect", () => console.log("Client has disconnected"));
 });
 
 console.log('Waiting for clients to connect');
-server.listen(3003);
+server.listen(port, () => console.log(`Listening on port ${port}`));

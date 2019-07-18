@@ -11,6 +11,7 @@ class App extends Component {
     this.state = {
       title: "",
       tasks: [],
+      completed: [],
     };
   }
 
@@ -18,10 +19,18 @@ class App extends Component {
     //LISTENERS
 
     //TODO:receive initial DB tasks when connecting for first time
-    //TODO:receiving new tasks from socket
+
+    //receiving new tasks from socket
+    socket.on("RECEIVE_NEW_TASK", data => this.setState({
+      tasks: [...this.state.tasks, data.title]
+    }));
+
     //TODO:receive deleted task from socket using task index
+
     //TODO:receive completed task from socket
+
     //TODO:receive all completed tasks from socket when all are completed
+
     //TODO:delete all tasks from socket when a client deletes all completed task
 };
 
@@ -41,6 +50,8 @@ class App extends Component {
     console.log(title);
     this.setState({ tasks: [...this.state.tasks, title] });
 
+    socket.emit("MAKE", title);
+
     //resetting the form manually
     this.setState({
       title: ""
@@ -54,6 +65,12 @@ class App extends Component {
 
   markAllComplete = () => {
     //handle when a user marks all tasks as complete
+    const tasks = [ ...this.state.tasks];
+    this.setState({completed: [...this.state.completed, tasks]})
+    console.log(this.state.completed)
+    this.setState({tasks: []})
+    console.log(this.state.tasks)
+
     //send to server to update on all clients
   };
 
@@ -65,6 +82,8 @@ class App extends Component {
   deleteAllTasks = () => {
     //handle when a user deletes all tasks
     //send to server to delete on all clients
+    this.setState({tasks: []})
+    console.log(this.state.tasks)
   };
 
   render() {
