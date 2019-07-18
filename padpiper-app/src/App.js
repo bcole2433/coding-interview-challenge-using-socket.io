@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import "./App.css";
 import AddItemForm from "./Components/AddItemForm";
 import TaskTable from "./Components/TaskTable";
+import socketIOClient from "socket.io-client";
+const socket = socketIOClient("http://localhost:3003/");
 
 class App extends Component {
   constructor(props) {

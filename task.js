@@ -1,7 +1,7 @@
-class Todo {
+class Task {
   constructor(title='') {
     this.title = title
   }
 }
 
-module.exports = Todo;
+module.exports = Task;
