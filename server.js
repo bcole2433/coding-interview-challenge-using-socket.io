@@ -32,7 +32,6 @@ io.on('connection', (client) => {
   client.on("MAKE", data => {
         
     // Make a new task
-    const 
       const newTask = new Task(data.title);
 
       // Push this newly created todo to our database

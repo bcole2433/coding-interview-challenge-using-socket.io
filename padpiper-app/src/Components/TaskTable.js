@@ -1,48 +1,57 @@
-import React from "react";
+import React, { Component } from "react";
 import { Container, Button, Col, Row } from "react-bootstrap";
 
-const TaskTable = ({ tasks }) => {
-  if (!tasks) {
-    return null;
+class TaskTable extends Component {
+  render() {
+    if (!this.props.tasks) {
+      return null;
+    }
+    return (
+      <Container>
+        <label>
+          <h1>Tasks</h1>
+        </label>
+        {this.props.tasks.map((task, index) => (
+          <TaskComponent
+            key={index}
+            task={task}
+            onDelete={this.props.handleDelete}
+            onComplete={this.props.handleComplete}
+          />
+        ))}
+      </Container>
+    );
   }
-
-  return (
-    <Container>
-    <label>
-      <h1>Tasks</h1>
-    </label>
-    <div>
-      {tasks.map((task, index) => (
-        <TaskComponent
-        task={task}
-        key={index}
-        />
-      ))}
-    </div>
-  </Container>
-  );
-};
+}
 
 export default TaskTable;
 
-const TaskComponent = ({ task, index }) => {
-  return (
-    <Container>
-    <Row>
-    <Col>
-      <label>{ task }</label>
-    </Col>
-      <Col>
-        <Button
-        size="sm"
-        variant="outline-primary"
-        >Complete</Button>
-        <Button
-        variant="outline-primary"
-        size="sm"
-        >Delete</Button>
-      </Col>
-      </Row>
-    </Container>
-  );
-};
+class TaskComponent extends Component {
+  render() {
+    return (
+      <Container key={this.key}>
+        <Row>
+          <Col>
+            <label>{this.props.task}</label>
+          </Col>
+          <Col>
+            <Button
+              size="sm"
+              variant="outline-primary"
+              onClick={() => this.props.onComplete(this.props.task)}
+            >
+              Complete
+            </Button>
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => this.props.onDelete(this.props.task)}
+            >
+              Delete
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
+}
