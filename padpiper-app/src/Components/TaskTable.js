@@ -7,31 +7,33 @@ class TaskTable extends Component {
       return null;
     }
     return (
-      <Container>
+      <Container fluid="true">
       <label>
-          <h1>Tasks</h1>
+          <h4>Tasks</h4>
         </label>
+        &nbsp;
         <Button
             size="sm"
             variant="outline-primary"
             onClick={() => this.props.markAllComplete()}
           >
-            Mark All Completed
+            Mark All Complete
           </Button>
+          &nbsp;
           <Button
             size="sm"
-            variant="outline-primary"
-            onClick={() => this.props.deleteAll()}
+            variant="outline-danger"
+            onClick={() => this.props.deleteAllTasks()}
           >
             Delete All
           </Button>
         
-        {this.props.tasks.map((task, index) => (
+        {this.props.tasks.map((task, i) => (
           <TaskComponent
-            key={index}
+            key={i}
             task={task}
-            onDelete={this.props.handleDelete}
-            onComplete={this.props.handleComplete}
+            handleDelete={this.props.handleDelete}
+            handleComplete={this.props.handleComplete}
           />
         ))}
       </Container>
@@ -44,23 +46,26 @@ export default TaskTable;
 class TaskComponent extends Component {
   render() {
     return (
-      <Container key={this.key}>
+      <Container fluid="true">
         <Row>
           <Col>
             <label>{this.props.task}</label>
           </Col>
           <Col>
             <Button
+            name="completeButton"
               size="sm"
               variant="outline-primary"
-              onClick={() => this.props.onComplete(this.props.task)}
+              onClick={() => this.props.handleComplete(this.props.task)}
             >
               Complete
             </Button>
+            &nbsp;
             <Button
-              variant="outline-primary"
+            name="deleteButton"
+            variant="outline-danger"
               size="sm"
-              onClick={() => this.props.onDelete(this.props.task)}
+              onClick={() => this.props.handleDelete(this.props.task)}
             >
               Delete
             </Button>

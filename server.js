@@ -12,11 +12,6 @@ const io = socketIo(server);
 
 io.on('connection', (client) => {
   console.log("New Client Connected: " + client.id);
-  // This is going to be our fake 'database' for this application
-  // Parse all default Todo's from db
-
-  // FIXME: DB is reloading on client refresh. It should be persistent on new client
-  // connections from the last time the server was run...
   const DB = firstTasks.map((t) => {
     // Form new Task objects
     return new Task(title=t.title);
@@ -52,11 +47,10 @@ client.broadcast.emit("RECEIVE_COMPLETED_TASK", data);
 
 client.on("COMPLETE_ALL", data => {
 //using broadcast to avoid sending same data back
-client.broadcast.emit("RECEIVE_COMPLETE_ALL", data);
+client.broadcast.emit("RECEIVE_COMPLETE_ALL", []);
 });
 
 client.on("DELETE", data => {
-//TODO: Delete from database
 
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_DELETED_TASK", data);
@@ -65,7 +59,7 @@ client.broadcast.emit("RECEIVE_DELETED_TASK", data);
 client.on("DELETE_ALL", data => {
 
 //using broadcast to avoid sending same data back
-client.broadcast.emit("RECEIVE_DELETED_ALL", 'Delete All Called');
+client.broadcast.emit("RECEIVE_DELETED_ALL", []);
 });
 
 

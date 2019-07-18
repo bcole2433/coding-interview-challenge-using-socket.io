@@ -16,15 +16,15 @@ When you're finished, you should have a real-time TODO app that two or more peop
 - [x ] Clone this repo `git clone git@github.com:PadPiper/padpiper-interview-challenge.git`
 - [ x] Make your own private repo and push your changes to that (you'll need to update the origin on the clone)
 - [x ] Add `zlwaterfield` and `JackForbes` as collaborators on the new repo [settings->collaborators]
-- [ ] Commit often, with high quality comments
-- [ ] Write readable, performant code
+- [x ] Commit often, with high quality comments
+- [ x] Write readable, performant code
 - [ ] Fix all the bugs
-- [ ] Add a feature that allows users to complete tasks
-- [ ] Add a feature that allows users to delete tasks
-- [ ] Add a feature that allows the completion of all tasks
-- [ ] Add a feature that allows the deletion of all tasks
-- [ ] Add caching to the client app so that when we lose our connection we can still see our TODO's
-- [ ] Give it some UX/UI :heart:, our approach is make it easy to use- _then_ make it beautiful
+- [x ] Add a feature that allows users to complete tasks
+- [x ] Add a feature that allows users to delete tasks
+- [x ] Add a feature that allows the completion of all tasks
+- [ x] Add a feature that allows the deletion of all tasks
+- [ x] Add caching to the client app so that when we lose our connection we can still see our TODO's
+- [x ] Give it some UX/UI :heart:, our approach is make it easy to use- _then_ make it beautiful
 
 ## Set Up
 This is a Node app so you'll need Node, NPM and yarn to get it up on its feet.

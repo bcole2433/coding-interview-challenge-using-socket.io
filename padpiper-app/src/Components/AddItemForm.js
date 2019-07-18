@@ -7,7 +7,7 @@ class AddItemForm extends Component {
 <Container fluid="true">
           <Form onSubmit={this.handleTaskAdd}>
             <Form.Row>
-              <h4>Add a new Task</h4>
+              <h4>Add a new task</h4>
             </Form.Row>
             <Form.Row>
               <Col lg={true}>
@@ -18,7 +18,7 @@ class AddItemForm extends Component {
                     block="true"
                     value={this.props.title}
                     onChange={this.props.handleChange}
-                    placeholder="ie. Feed the cat"
+                    placeholder="ie. Toss Brenden an offer :)"
                   />
                 </Form.Group>
               </Col>
@@ -28,7 +28,7 @@ class AddItemForm extends Component {
                 <Form.Group className="float-right">
                   <Button
                     variant="outline-primary"
-                    size="lg"
+                    size="sm"
                     type="submit"
                     onClick={this.props.handleTaskAdd}
                     disabled={!this.props.title}
