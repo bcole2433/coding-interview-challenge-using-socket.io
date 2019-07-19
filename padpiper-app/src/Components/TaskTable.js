@@ -7,11 +7,21 @@ class TaskTable extends Component {
       return null;
     }
     return (
-      <Container fluid="true">
+    <div>
       <label>
           <h4>Tasks</h4>
         </label>
-        &nbsp;
+        {this.props.tasks.map((task, i) => (
+          <TaskComponent
+            key={i}
+            task={task}
+            handleDelete={this.props.handleDelete}
+            handleComplete={this.props.handleComplete}
+          />
+        ))}
+        <br></br>
+        <Container>
+        <Row className="justify-content-md-center">
         <Button
             size="sm"
             variant="outline-primary"
@@ -27,16 +37,9 @@ class TaskTable extends Component {
           >
             Delete All
           </Button>
-        
-        {this.props.tasks.map((task, i) => (
-          <TaskComponent
-            key={i}
-            task={task}
-            handleDelete={this.props.handleDelete}
-            handleComplete={this.props.handleComplete}
-          />
-        ))}
-      </Container>
+          </Row>
+          </Container>
+        </div>
     );
   }
 }

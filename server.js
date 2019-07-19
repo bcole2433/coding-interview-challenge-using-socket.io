@@ -40,6 +40,7 @@ io.on('connection', (client) => {
 });
 
 client.on("COMPLETE", data => {
+  console.log(data);
 
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_COMPLETED_TASK", data);
@@ -61,8 +62,6 @@ client.on("DELETE_ALL", data => {
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_DELETED_ALL", []);
 });
-
-
 
   //listening for when a client disconnects
   client.on("disconnect", () => console.log("Client has disconnected"));

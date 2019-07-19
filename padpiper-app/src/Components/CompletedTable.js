@@ -12,8 +12,8 @@ class CompletedTable extends Component {
           <h4>Completed Tasks</h4>
         </label>
         {this.props.completedList.map(completed => (
-          <Container>
-            <label key={completed}>{completed}</label>
+          <Container key={completed}>
+            <label>{completed}</label>
           </Container>
         ))}
       </Container>

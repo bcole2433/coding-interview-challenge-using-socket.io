@@ -28,7 +28,7 @@ class AddItemForm extends Component {
                 <Form.Group className="float-right">
                   <Button
                     variant="outline-primary"
-                    size="sm"
+                    size="lg"
                     type="submit"
                     onClick={this.props.handleTaskAdd}
                     disabled={!this.props.title}

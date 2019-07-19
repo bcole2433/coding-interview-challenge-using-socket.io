@@ -38,12 +38,10 @@ class App extends Component {
 
     //TODO:receive completed task from socket
     socket.on("RECEIVE_COMPLETED_TASK", data => {
-    const filteredTaskList = this.state.tasks.filter(task => task !== data);
-    console.log(data);
-    this.setState({
-      completed: [...this.state.completed, data],
-      tasks: [...filteredTaskList]
-    });
+      this.setState({
+        completed: [...this.state.completed, data],
+        tasks: this.state.tasks.filter(task => task !== data[0])
+      });
     });
 
     //Receive all completed tasks from socket when all are completed
