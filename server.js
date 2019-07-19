@@ -40,7 +40,6 @@ io.on('connection', (client) => {
 });
 
 client.on("COMPLETE", data => {
-  console.log(data);
 
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_COMPLETED_TASK", data);

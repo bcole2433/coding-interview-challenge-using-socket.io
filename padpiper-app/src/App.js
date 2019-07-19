@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import { Container, Row, Col } from "react-bootstrap";
+import Nav from "./Components/Nav";
 import AddItemForm from "./Components/AddItemForm";
 import TaskTable from "./Components/TaskTable";
 import CompletedTable from "./Components/CompletedTable";
@@ -143,6 +144,9 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
+      <Nav />
+      <Container>
+      <br></br>
         <h2>PadPiper Team Tasks</h2>
         <AddItemForm
           title={this.state.title}
@@ -164,6 +168,7 @@ class App extends Component {
               <CompletedTable completedList={this.state.completed} />
             </Col>
           </Row>
+        </Container>
         </Container>
       </React.Fragment>
     );

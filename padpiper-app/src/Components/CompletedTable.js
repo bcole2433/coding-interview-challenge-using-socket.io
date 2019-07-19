@@ -3,8 +3,8 @@ import { Container } from "react-bootstrap";
 
 class CompletedTable extends Component {
   render() {
-    if (!this.props.completedList) {
-      return null;
+    if (!this.props.completedList || this.props.completedList.length < 1) {
+      return <h4> Completed Tasks (0)</h4>;
     }
     return (
       <Container>
