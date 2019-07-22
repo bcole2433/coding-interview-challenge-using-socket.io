@@ -15,6 +15,7 @@ let DB = firstTasks.map((t) => {
   // forming initial tasks when server first starts
   return new Task(title=t.title);
 });
+//fake DB for the completed items, could also just add a "completed" property to Task
 let CompletedDB = [];
 
 io.on('connection', (client) => {
@@ -54,7 +55,6 @@ client.on("COMPLETE", data => {
   //removing completed task from task DB
   console.log(data);
   const filteredDB = DB.filter(task => task.title !== data[0]);
-  // DB.splice(DB.findIndex(task => task.title === data), 1);
   DB = filteredDB;
      console.log(DB);
 
