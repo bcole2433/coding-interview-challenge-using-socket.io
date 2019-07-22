@@ -10,16 +10,21 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+//creating the 'fake' database to focus on functionality
+let DB = firstTasks.map((t) => {
+  // forming initial tasks when server first starts
+  return new Task(title=t.title);
+});
+let CompletedDB = [];
+
 io.on('connection', (client) => {
   console.log("New Client Connected: " + client.id);
-  const DB = firstTasks.map((t) => {
-    // Form new Task objects
-    return new Task(title=t.title);
-  });
+  
 
   // Sends a message to the client to reload all todos
   const loadTasks = () => {
     client.emit('LOAD', DB);
+    client.emit('LOAD_COMPLETED', CompletedDB)
   }
     // Send the DB downstream on connect
     loadTasks();
@@ -40,23 +45,37 @@ io.on('connection', (client) => {
 });
 
 client.on("COMPLETE", data => {
+  //removing completed task from task DB
+  const filteredTasks = [...DB.filter(task => task.title !== data[0])];
+  DB = filteredTasks;
+  console.log(DB);
+
+  // Make a new completed task
+  const newCompletedTask = new Task(title=data);
+  CompletedDB.push(newCompletedTask);
 
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_COMPLETED_TASK", data);
 });
 
 client.on("COMPLETE_ALL", data => {
+  CompletedDB = [...CompletedDB, ...DB];
+  DB = data;
+
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_COMPLETE_ALL", []);
 });
 
 client.on("DELETE", data => {
+  const filteredTasks = DB.filter(task => task !== data);
+  DB = filteredTasks;
 
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_DELETED_TASK", data);
 });
 
 client.on("DELETE_ALL", data => {
+  CompletedDB, DB = data;
 
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_DELETED_ALL", []);
@@ -64,6 +83,7 @@ client.broadcast.emit("RECEIVE_DELETED_ALL", []);
 
   //listening for when a client disconnects
   client.on("disconnect", () => console.log("Client has disconnected"));
+  
 });
 
 console.log('Waiting for clients to connect');

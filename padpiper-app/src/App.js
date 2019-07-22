@@ -12,7 +12,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
       tasks: [],
       completed: []
     };
@@ -20,13 +19,44 @@ class App extends Component {
 
   componentDidMount() {
     //LISTENERS
-    //Receive initial DB tasks when connecting for first time
+
     socket.on("LOAD", data => {
-      const dataArr = data.map(item => {
+    //Checking if content is cached or not
+    //If yes, empty tasks and/or completed
+    //If no, receive initial DB tasks when connecting for first time
+    if (this.state.tasks.length > 0) {
+      //empty tasks and completed and reload data
+      console.log('task list was filled');
+      this.setState({
+        tasks: []
+      });
+    };
+
+    if (this.state.completed.length > 0) {
+      //empty tasks and completed and reload data
+      console.log('completed list was filled')
+      this.setState({
+        completed: []
+      });
+    };
+      //mapping data
+      const taskArr = data.map(item => {
         return item.title;
       });
+
       this.setState({
-        tasks: [...this.state.tasks, ...dataArr]
+        tasks: [...this.state.tasks, ...taskArr]
+      });
+    });
+
+    //Receive previously completed DB tasks when connecting for first time
+    socket.on("LOAD_COMPLETED", data => {
+      const completedArr = data.map(item => {
+        return item.title;
+      });
+
+      this.setState({
+        completed: [...this.state.completed, ...completedArr]
       });
     });
 
@@ -37,7 +67,7 @@ class App extends Component {
       })
     );
 
-    //TODO:receive completed task from socket
+    //receive completed task from socket
     socket.on("RECEIVE_COMPLETED_TASK", data => {
       this.setState({
         completed: [...this.state.completed, data],
@@ -144,31 +174,31 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-      <Nav />
-      <Container>
-      <br></br>
-        <h2>PadPiper Team Tasks</h2>
-        <AddItemForm
-          title={this.state.title}
-          handleChange={this.handleChange}
-          handleTaskAdd={this.submitTask}
-        />
-        <Container fluid="true">
-          <Row>
-            <Col className="taskCard">
-              <TaskTable
-                tasks={this.state.tasks}
-                handleComplete={this.handleComplete}
-                markAllComplete={this.markAllComplete}
-                handleDelete={this.handleDelete}
-                deleteAllTasks={this.deleteAllTasks}
-              />
-            </Col>
-            <Col className="taskCard">
-              <CompletedTable completedList={this.state.completed} />
-            </Col>
-          </Row>
-        </Container>
+        <Nav />
+        <Container>
+          <br />
+          <h2>PadPiper Team Tasks</h2>
+          <AddItemForm
+            title={this.state.title}
+            handleChange={this.handleChange}
+            handleTaskAdd={this.submitTask}
+          />
+          <Container fluid="true">
+            <Row>
+              <Col className="taskCard">
+                <TaskTable
+                  tasks={this.state.tasks}
+                  handleComplete={this.handleComplete}
+                  markAllComplete={this.markAllComplete}
+                  handleDelete={this.handleDelete}
+                  deleteAllTasks={this.deleteAllTasks}
+                />
+              </Col>
+              <Col className="taskCard">
+                <CompletedTable completedList={this.state.completed} />
+              </Col>
+            </Row>
+          </Container>
         </Container>
       </React.Fragment>
     );
