@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Container, Row, Col } from "react-bootstrap";
 import Nav from "./Components/Nav";
@@ -8,201 +8,170 @@ import CompletedTable from "./Components/CompletedTable";
 import socketIOClient from "socket.io-client";
 const socket = socketIOClient("http://localhost:3003/");
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tasks: [],
-      completed: []
-    };
-  }
+const App = () => {
+  let [title, setTitle] = useState('');
+  let [tasks, setTasks] = useState([]);
+  let [completed, setCompleted] = useState([]);
 
-  componentDidMount() {
     //LISTENERS
-
     socket.on("LOAD", data => {
-    //Checking if content is cached or not
-    //If yes, empty tasks and/or completed
-    //If no, receive initial DB tasks when connecting for first time
-    if (this.state.tasks.length > 0) {
-      //empty tasks and completed and reload data
-      console.log('task list was filled');
-      this.setState({
-        tasks: []
-      });
-    };
+      //Checking if content is cached or not
+      //If yes, empty tasks and/or completed
+      //If no, receive initial DB tasks when connecting for first time
+      if (tasks.length > 0) {
+        console.log("task list was filled");
+        setTasks([]);
+      }
 
-    if (this.state.completed.length > 0) {
-      //empty tasks and completed and reload data
-      console.log('completed list was filled')
-      this.setState({
-        completed: []
-      });
-    };
+      if (completed.length > 0) {
+        console.log("completed list was filled");
+        setCompleted([]);
+      }
+
       //mapping data
       const taskArr = data.map(item => {
         return item.title;
       });
-
-      this.setState({
-        tasks: [...this.state.tasks, ...taskArr]
-      });
+      setTasks([...tasks, ...taskArr]);
     });
-
+    
     //Receive previously completed DB tasks when connecting for first time
     socket.on("LOAD_COMPLETED", data => {
       const completedArr = data.map(item => {
         return item.title;
       });
 
-      this.setState({
-        completed: [...this.state.completed, ...completedArr]
-      });
+      setCompleted([...completed, ...completedArr]);
     });
 
+    //using react hook useEffect to (re)render only if state changes
+  useEffect(() => {
     //receiving new tasks from socket
-    socket.on("RECEIVE_NEW_TASK", data =>
-      this.setState({
-        tasks: [...this.state.tasks, data]
-      })
-    );
+    socket.on("RECEIVE_NEW_TASK", data => {
+      setTasks([...tasks, data]);
+    });
 
     //receive completed task from socket
     socket.on("RECEIVE_COMPLETED_TASK", data => {
-      this.setState({
-        completed: [...this.state.completed, data],
-        tasks: this.state.tasks.filter(task => task !== data[0])
-      });
+      setCompleted([...completed, data]);
+      setTasks([...tasks.filter(task => task !== data)]);
     });
 
     //Receive all completed tasks from socket when all are completed
     socket.on("RECEIVE_COMPLETE_ALL", data => {
-      const tasks = [...this.state.tasks];
-      this.setState({
-        completed: [...this.state.completed, ...tasks],
-        tasks: []
-      });
+      const nTasks = [...tasks];
+      setCompleted([...completed, ...nTasks]);
+      setTasks([]);
     });
 
     //Receive deleted task from socket using task index
     socket.on("RECEIVE_DELETED_TASK", data => {
       console.log("Delete Data: " + data);
-      const filteredTasks = this.state.tasks.filter(task => task !== data);
-      this.setState({
-        tasks: filteredTasks
-      });
+      const filteredTasks = tasks.filter(task => task !== data);
+      setTasks(filteredTasks);
     });
 
     //Delete all tasks from socket when a client deletes all completed task
-    socket.on("RECEIVE_DELETED_ALL", data =>
-      this.setState({
-        tasks: [],
-        completed: []
-      })
-    );
-  }
+    socket.on("RECEIVE_DELETED_ALL", data => {
+      setTasks([]);
+      setCompleted([]);
+    });
+  }, [completed, tasks]);
 
   //ACTIONS
-  handleChange = e => {
+  const handleChange = e => {
     e.preventDefault();
     const target = e.target;
-    const name = target.name;
     const value = target.value;
-    this.setState({ [name]: value });
+    setTitle(value);
   };
 
   //submitting new task and emitting it to clients
-  submitTask = e => {
+  const submitTask = e => {
     e.preventDefault();
-    const title = this.state.title;
-    this.setState({ tasks: [...this.state.tasks, title] });
+    const nTitle = e.target.value;
+    setTasks([...tasks, nTitle]);
+    console.log(tasks)
 
-    socket.emit("MAKE", title);
+    socket.emit("MAKE", nTitle);
 
     //resetting the form manually
-    this.setState({
-      title: ""
-    });
+    setTitle('');
   };
 
-  handleComplete = taskID => {
+  const handleComplete = taskID => {
     //handle when a user marks task as complete
-    const completedTask = this.state.tasks.filter(task => task === taskID);
-    const filteredTaskList = this.state.tasks.filter(task => task !== taskID);
-    console.log(completedTask);
-    this.setState({
-      completed: [...this.state.completed, completedTask],
-      tasks: [...filteredTaskList]
-    });
+    const completedTask = tasks.filter(task => task === taskID);
+    const filteredTaskList = tasks.filter(task => task !== taskID);
 
     //send to server to update on all clients
-    socket.emit("COMPLETE", completedTask);
+    socket.emit("COMPLETE", completedTask[0]);
+
+    setCompleted([...completed, completedTask]);
+    setTasks([...filteredTaskList]);
+    console.log(tasks);
+    console.log(completed);
   };
 
-  markAllComplete = () => {
+  const markAllComplete = () => {
     //handle when a user marks all tasks as complete
-    const tasks = [...this.state.tasks];
-    this.setState({
-      completed: [...this.state.completed, ...tasks],
-      tasks: []
-    });
+
+    const nTasks = [...tasks];
+    setCompleted([...completed, ...nTasks]);
+    setTasks([]);
 
     //send to server to update on all clients
     socket.emit("COMPLETE_ALL", []);
   };
 
-  handleDelete = taskID => {
+  const handleDelete = taskID => {
     //handle when a user deletes a single task
-    const filteredTasks = this.state.tasks.filter(task => task !== taskID);
-    this.setState({
-      tasks: filteredTasks
-    });
+    const filteredTasks = tasks.filter(task => task !== taskID);
+    setTasks(filteredTasks);
+
     //send to server to update on all clients
     socket.emit("DELETE", taskID);
   };
 
-  deleteAllTasks = () => {
+  const deleteAllTasks = () => {
     //handle when a user deletes all tasks
-    this.setState({
-      tasks: [],
-      completed: []
-    });
+    setCompleted([]);
+    setTasks([]);
+
     //send to server to delete on all clients
     socket.emit("DELETE_ALL", []);
   };
 
-  render() {
-    return (
-      <React.Fragment>
-        <Nav />
-        <Container>
-          <br />
-          <h2>PadPiper Team Tasks</h2>
-          <AddItemForm
-            title={this.state.title}
-            handleChange={this.handleChange}
-            handleTaskAdd={this.submitTask}
-          />
-          <Container fluid="true">
-            <Row>
-              <Col className="taskCard">
-                <TaskTable
-                  tasks={this.state.tasks}
-                  handleComplete={this.handleComplete}
-                  markAllComplete={this.markAllComplete}
-                  handleDelete={this.handleDelete}
-                  deleteAllTasks={this.deleteAllTasks}
-                />
-              </Col>
-              <Col className="taskCard">
-                <CompletedTable completedList={this.state.completed} />
-              </Col>
-            </Row>
-          </Container>
+  return (
+    <React.Fragment>
+      <Nav />
+      <Container>
+        <br />
+        <h2>PadPiper Team Tasks</h2>
+        <AddItemForm
+          title={title}
+          handleChange={handleChange}
+          handleTaskAdd={submitTask}
+        />
+        <Container fluid="true">
+          <Row>
+            <Col className="taskCard">
+              <TaskTable
+                tasks={tasks}
+                handleComplete={handleComplete}
+                markAllComplete={markAllComplete}
+                handleDelete={handleDelete}
+                deleteAllTasks={deleteAllTasks}
+              />
+            </Col>
+            <Col className="taskCard">
+              <CompletedTable completedList={completed} />
+            </Col>
+          </Row>
         </Container>
-      </React.Fragment>
-    );
-  }
-}
+      </Container>
+    </React.Fragment>
+  );
+};
 
 export default App;

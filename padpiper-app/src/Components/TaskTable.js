@@ -1,31 +1,41 @@
-import React, { Component } from "react";
+import React from "react";
 import { Container, Button, Col, Row } from "react-bootstrap";
 
-class TaskTable extends Component {
-  render() {
-    if (!this.props.tasks) {
-      return null;
-    }
+const TaskTable = ({
+  tasks,
+  handleComplete,
+  markAllComplete,
+  deleteAllTasks,
+  handleDelete
+}) => {
+  if (!tasks || tasks.length < 1) {
     return (
+      <Container>
+        <h4>Tasks(0)</h4>
+        <p>Add more tasks to see them here!</p>
+      </Container>
+    );
+  }
+  return (
     <div>
       <label>
-          <h4>Tasks</h4>
-        </label>
-        {this.props.tasks.map((task, i) => (
-          <TaskComponent
-            key={i}
-            task={task}
-            handleDelete={this.props.handleDelete}
-            handleComplete={this.props.handleComplete}
-          />
-        ))}
-        <br></br>
-        <Container>
+        <h4>Tasks</h4>
+      </label>
+      {tasks.map((task, i) => (
+        <TaskComponent
+          key={i}
+          task={task}
+          handleDelete={handleDelete}
+          handleComplete={handleComplete}
+        />
+      ))}
+      <br />
+      <Container>
         <Row className="justify-content-md-center">
-        <Button
+          <Button
             size="sm"
             variant="outline-primary"
-            onClick={() => this.props.markAllComplete()}
+            onClick={() => markAllComplete()}
           >
             Mark All Complete
           </Button>
@@ -33,48 +43,45 @@ class TaskTable extends Component {
           <Button
             size="sm"
             variant="outline-danger"
-            onClick={() => this.props.deleteAllTasks()}
+            onClick={() => deleteAllTasks()}
           >
             Delete All
           </Button>
-          </Row>
-          </Container>
-        </div>
-    );
-  }
-}
+        </Row>
+      </Container>
+    </div>
+  );
+};
 
 export default TaskTable;
 
-class TaskComponent extends Component {
-  render() {
-    return (
-      <Container fluid="true">
-        <Row>
-          <Col>
-            <label>{this.props.task}</label>
-          </Col>
-          <Col>
-            <Button
+const TaskComponent = ({ task, handleDelete, handleComplete }) => {
+  return (
+    <Container fluid="true">
+      <Row>
+        <Col>
+          <label>{task}</label>
+        </Col>
+        <Col>
+          <Button
             name="completeButton"
-              size="sm"
-              variant="outline-primary"
-              onClick={() => this.props.handleComplete(this.props.task)}
-            >
-              Complete
-            </Button>
-            &nbsp;
-            <Button
+            size="sm"
+            variant="outline-primary"
+            onClick={() => handleComplete(task)}
+          >
+            Complete
+          </Button>
+          &nbsp;
+          <Button
             name="deleteButton"
             variant="outline-danger"
-              size="sm"
-              onClick={() => this.props.handleDelete(this.props.task)}
-            >
-              Delete
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-}
+            size="sm"
+            onClick={() => handleDelete(task)}
+          >
+            Delete
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  );
+};

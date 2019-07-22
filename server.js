@@ -49,12 +49,12 @@ client.on("COMPLETE", data => {
   
 
   // Make a new completed task
-  const newCompletedTask = new Task(title=data[0]);
+  const newCompletedTask = new Task(title=data);
   CompletedDB.push(newCompletedTask);
 
   //removing completed task from task DB
   console.log(data);
-  const filteredDB = DB.filter(task => task.title !== data[0]);
+  const filteredDB = DB.filter(task => task.title !== data);
   DB = filteredDB;
      console.log(DB);
 
