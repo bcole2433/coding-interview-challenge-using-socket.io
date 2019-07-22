@@ -12,7 +12,6 @@ const App = () => {
   let [title, setTitle] = useState('');
   let [tasks, setTasks] = useState([]);
   let [completed, setCompleted] = useState([]);
-
     //LISTENERS
     socket.on("LOAD", data => {
       //Checking if content is cached or not
