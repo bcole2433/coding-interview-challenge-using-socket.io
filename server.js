@@ -45,14 +45,18 @@ io.on('connection', (client) => {
 });
 
 client.on("COMPLETE", data => {
-  //removing completed task from task DB
-  const filteredTasks = [...DB.filter(task => task.title !== data[0])];
-  DB = filteredTasks;
-  console.log(DB);
+  
 
   // Make a new completed task
-  const newCompletedTask = new Task(title=data);
+  const newCompletedTask = new Task(title=data[0]);
   CompletedDB.push(newCompletedTask);
+
+  //removing completed task from task DB
+  console.log(data);
+  const filteredDB = DB.filter(task => task.title !== data[0]);
+  // DB.splice(DB.findIndex(task => task.title === data), 1);
+  DB = filteredDB;
+     console.log(DB);
 
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_COMPLETED_TASK", data);
@@ -60,14 +64,14 @@ client.broadcast.emit("RECEIVE_COMPLETED_TASK", data);
 
 client.on("COMPLETE_ALL", data => {
   CompletedDB = [...CompletedDB, ...DB];
-  DB = data;
+  DB = [];
 
 //using broadcast to avoid sending same data back
 client.broadcast.emit("RECEIVE_COMPLETE_ALL", []);
 });
 
 client.on("DELETE", data => {
-  const filteredTasks = DB.filter(task => task !== data);
+  const filteredTasks = DB.filter(task => task.title !== data);
   DB = filteredTasks;
 
 //using broadcast to avoid sending same data back
@@ -85,6 +89,7 @@ client.broadcast.emit("RECEIVE_DELETED_ALL", []);
   client.on("disconnect", () => console.log("Client has disconnected"));
   
 });
+
 
 console.log('Waiting for clients to connect');
 server.listen(port, () => console.log(`Listening on port ${port}`));
