@@ -153,9 +153,9 @@ const App = () => {
           handleChange={handleChange}
           handleTaskAdd={submitTask}
         />
-        <Container fluid="true">
+        <Container >
           <Row>
-            <Col className="taskCard">
+            <Col className="taskCard" lg >
               <TaskTable
                 tasks={tasks}
                 handleComplete={handleComplete}
@@ -164,7 +164,7 @@ const App = () => {
                 deleteAllTasks={deleteAllTasks}
               />
             </Col>
-            <Col className="taskCard">
+            <Col className="taskCard" lg>
               <CompletedTable completedList={completed} />
             </Col>
           </Row>

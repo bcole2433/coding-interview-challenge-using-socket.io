@@ -10,7 +10,7 @@ const TaskTable = ({
 }) => {
   if (!tasks || tasks.length < 1) {
     return (
-      <Container>
+      <Container fluid="true">
         <h4>Tasks(0)</h4>
         <p>Add more tasks to see them here!</p>
       </Container>
@@ -30,7 +30,7 @@ const TaskTable = ({
         />
       ))}
       <br />
-      <Container>
+      <Container fluid="true">
         <Row className="justify-content-md-center">
           <Button
             size="sm"
