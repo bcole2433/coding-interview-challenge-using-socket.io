@@ -18,15 +18,12 @@ When you're finished, you should have a real-time TODO app that two or more peop
 - We're evaluating you on the quality and completion of Your Quest list below. Do you commit often? Did you write team friendly code? Is the UI that you've built easy to use and easy on the eyes? :eyes:
 - The challenge should take 3-6 hours.
 - If you prefer a functional style (or some other style of programming) feel free to switch things up to suit how you write best. The codebase is intentionally small to support different styles/complete rewrites. Don't let how we've set things up get in the way of showing us your best work.
-- It should be fun! If you're stuck on a bug or something needs clarification you can <zach@padpiper.com> for help.
 
 ##  Your Quest
-- [x ] Clone this repo `git clone git@github.com:PadPiper/padpiper-interview-challenge.git`
 - [ x] Make your own private repo and push your changes to that (you'll need to update the origin on the clone)
-- [x ] Add `zlwaterfield` and `JackForbes` as collaborators on the new repo [settings->collaborators]
 - [x ] Commit often, with high quality comments
 - [ x] Write readable, performant code
-- [ ] Fix all the bugs
+- [ x] Fix all the bugs
 - [x ] Add a feature that allows users to complete tasks
 - [x ] Add a feature that allows users to delete tasks
 - [x ] Add a feature that allows the completion of all tasks
@@ -43,6 +40,3 @@ yarn start
 ```
 
 Now open `index.html` in your browser. Things won't work at first, but once the server is running, you should see your TODO's under the input.
-
-## Done?
-Great job! When you're all finished, send me an email with a link to the repo and I will check it out! 🙌
